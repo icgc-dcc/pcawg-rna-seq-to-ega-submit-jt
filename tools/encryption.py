@@ -23,19 +23,22 @@ input_file = task_dict.get('input').get('input_file')
 
 task_start = int(time.time())
 
-file_dir = os.path.dirname(input_file)
-file_name = os.path.basename(input_file)
 
 # gzip xml file
 if input_file.endswith('xml'):
     try:
+        file_dir = os.path.dirname(input_file)
+        file_name = os.path.basename(input_file)
+
         filename = '.'.join(['analysis', file_name.rstrip('.xml'), 'GNOS', 'xml', 'gz'])
         with open(input_file, 'rb') as f_in, gzip.open(os.path.join(file_dir, filename), 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
         input_file = os.path.join(file_dir, filename)
     except Exception, e:
         with open('jt.log', 'w') as f: f.write(str(e))
-        sys.exit(1)  # task failed    
+        sys.exit(1)  # task failed
+        
+file_name = os.path.basename(input_file) 
 
 try:
     os.rename(input_file, cwd+"/"+file_name)
