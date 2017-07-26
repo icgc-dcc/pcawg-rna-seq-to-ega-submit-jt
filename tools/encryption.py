@@ -37,7 +37,7 @@ if input_file.endswith('xml'):
         sys.exit(1)  # task failed    
 
 try:
-    r = subprocess.check_output(['java', '-jar', os.environ['EGA_CRY_JAR']+'/EgaCryptor.jar', '-file', input_file])
+    r = subprocess.check_output(['encrypt_ega_file.py', '-f', input_file])
 except Exception, e:
     with open('jt.log', 'w') as f: f.write(str(e))
     sys.exit(1)  # task failed
