@@ -23,11 +23,12 @@ input_file = task_dict.get('input').get('input_file')
 
 task_start = int(time.time())
 
+file_dir = os.path.dirname(input_file)
+file_name = os.path.basename(input_file)
+
 # gzip xml file
 if input_file.endswith('xml'):
     try:
-        file_dir = os.path.dirname(input_file)
-        file_name = os.path.basename(input_file)
         filename = '.'.join(['analysis', file_name.rstrip('.xml'), 'GNOS', 'xml', 'gz'])
         with open(input_file, 'rb') as f_in, gzip.open(os.path.join(file_dir, filename), 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
@@ -37,7 +38,8 @@ if input_file.endswith('xml'):
         sys.exit(1)  # task failed    
 
 try:
-    r = subprocess.check_output(['java', '-jar', os.environ['EGA_CRY_JAR']+'/EgaCryptor.jar', '-file', input_file])
+    os.rename(input_file, cwd+"/"+file_name)
+    r = subprocess.check_output(['java', '-jar', os.environ['EGA_CRY_JAR']+'/EgaCryptor.jar', '-file', file_name])
 except Exception, e:
     with open('jt.log', 'w') as f: f.write(str(e))
     sys.exit(1)  # task failed
@@ -60,9 +62,9 @@ task_stop = int(time.time())
 """
 
 output_json = {
-    'encrypted_file': input_file+'.gpg',
-    'encrypted_md5_file': input_file+'.gpg.md5',
-    'unencrypted_md5_file': input_file+'.md5',
+    'encrypted_file': cwd+"/"+file_name+'.gpg',
+    'encrypted_md5_file': cwd+"/"+file_name+'.gpg.md5',
+    'unencrypted_md5_file': cwd+"/"+file_name+'.md5',
     'runtime': {
         'task_start': task_start,
         'task_stop': task_stop
