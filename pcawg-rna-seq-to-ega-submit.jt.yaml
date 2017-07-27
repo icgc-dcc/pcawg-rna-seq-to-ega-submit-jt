@@ -2,7 +2,7 @@
 
 workflow:
   name:  pcawg-rna-seq-to-ega-submit
-  version: "0.1.11"
+  version: "0.1.12"
   source_code: "https://github.com/icgc-dcc/pcawg-rna-seq-to-ega-submit-jt"
 
   runtime:
@@ -80,7 +80,7 @@ workflow:
         delete_unencrypted_file:
           tool: delete_file
           input:
-            file: file@download
+            file: unencrypted_file@encryption
           depends_on:
           - completed@encryption  # depends on the success of md5sum check       
         upload:
@@ -150,6 +150,9 @@ tools:
         type: string
         is_file: true
       unencrypted_md5_file:
+        type: string
+        is_file: true
+      unencrypted_file:
         type: string
         is_file: true
 

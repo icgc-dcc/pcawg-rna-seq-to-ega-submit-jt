@@ -62,12 +62,16 @@ task_stop = int(time.time())
       unencrypted_md5_file:
         type: string
         is_file: true
+      unencrypted_file:
+        type: string
+        is_file: true
 """
 
 output_json = {
     'encrypted_file': cwd+"/"+file_name+'.gpg',
     'encrypted_md5_file': cwd+"/"+file_name+'.gpg.md5',
     'unencrypted_md5_file': cwd+"/"+file_name+'.md5',
+    'unencrypted_file': cwd+"/"+file_name,
     'runtime': {
         'task_start': task_start,
         'task_stop': task_stop
